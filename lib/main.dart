@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'counter.dart';
 
@@ -11,7 +11,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +20,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-final provider = StateNotifierProvider((ref) => CounterNotifier());
+final provider = StateNotifierProvider<CounterNotifier, CounterModel>(
+  (ref) => CounterNotifier(),
+);
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -41,7 +43,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read(provider).increment();
+          context.read(provider.notifier).increment();
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
@@ -51,11 +53,11 @@ class MyHomePage extends StatelessWidget {
 }
 
 class CounterTextWidget extends HookWidget {
-  const CounterTextWidget({Key key}) : super(key: key);
+  const CounterTextWidget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     print('building CounterTextWidget');
-    final counterModel = useProvider(provider.state);
+    final counterModel = useProvider(provider);
     return Text(
       '${counterModel.count}',
       style: Theme.of(context).textTheme.headline4,
